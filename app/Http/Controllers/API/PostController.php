@@ -6,14 +6,30 @@ use App\Http\Controllers\Controller;
 use App\Models\Post;
 use App\Models\Post_dislike;
 use App\Models\Post_like;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 
 class PostController extends Controller
 {
+
     public function index()
     {
         $posts = Post::with('post_comment')->latest()->get();
+
+        return response()->json([
+            'success' => true,
+            'message' => 'Data Post',
+            'data' => $posts
+        ]);
+    }
+    public function search($keyword = '')
+    {
+        $this->keyword = $keyword;
+
+       $posts =  Post::with('post_comment')->with('user')->whereHas('user', function (Builder $query) {
+            $query->where('name', 'like', $this->keyword .'%');
+        })->latest()->get();
 
         return response()->json([
             'success' => true,

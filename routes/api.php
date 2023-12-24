@@ -4,6 +4,8 @@ use App\Http\Controllers\API\CommentController;
 use App\Http\Controllers\API\LoginController;
 use App\Http\Controllers\API\PostController;
 use App\Http\Controllers\API\RegisterController;
+use App\Models\Post;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -31,9 +33,8 @@ Route::post('/register', [RegisterController::class, 'register']);
 
 Route::post('/login', [LoginController::class, 'login']);
 
-Route::get('/userfree', [LoginController::class, 'userfree']);
-
 Route::get('/posts', [PostController::class, 'index'])->middleware('auth:api'); // show all post
+Route::get('/posts-search/{keyword?}', [PostController::class, 'search'])->middleware('auth:api'); // show with keyword
 Route::get('/posts-by/{id_user}', [PostController::class, 'showBy'])->middleware('auth:api'); // show all post
 Route::get('/posts/{id}', [PostController::class, 'show'])->middleware('auth:api'); //detail
 Route::post('/posts', [PostController::class, 'store'])->middleware('auth:api'); //insert
@@ -49,4 +50,6 @@ Route::post('/comment-like', [CommentController::class, 'like_comment'])->middle
 Route::post('/comment-dislike', [CommentController::class, 'dislike_comment'])->middleware('auth:api'); //dislike_comment
 
 Route::post('/logout', [LoginController::class, 'logout'])->middleware('auth:api'); //logout
+
+
 

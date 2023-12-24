@@ -14,6 +14,10 @@ class Post extends Model
 
     protected $appends = ['author','comments','post_like','post_dislike','is_i_liked','is_i_disliked','published_date_format'];
 
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'id_user', 'id');
+    }
     public function post_comment()
     {
         return $this->hasMany(Post_comment::class, 'id_post', 'id');
